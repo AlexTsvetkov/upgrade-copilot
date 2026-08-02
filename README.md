@@ -61,6 +61,19 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md). Conventional commits; generated code s
 
 [MIT](./LICENSE) © 2026 Aliaksandr Tsviatkou
 
+## Honest assessment
+
+> From the v2 self-critical analysis. Scores use **Gap · Value · Moat · Time-to-revenue · Risk** (for Risk, **higher = safer**). Prior art is named deliberately — "no competitor" is almost never true.
+
+**Scores:** Gap 3 · Value 5 · Moat 3 · TTR 2 · Risk 2
+
+- **Prior art / competition.** OpenRewrite does JVM codemods (free); SAP has its own code-upgrade / AI-assisted tooling; SIs sell upgrades fixed-bid. You'd fight a free framework *and* the vendor.
+- **True differentiator.** A curated SAP-Commerce-specific deprecation/codemod knowledge base (compounding data moat), built *on* OpenRewrite rather than reinventing it.
+- **Kill criterion.** If OpenRewrite recipes + SAP's own tool cover the common version deltas, the paid slice is too thin.
+- **Verdict.** **Explore, don't commit.** Biggest budget line, but validate the paid slice before building.
+
+See the full landscape, go-to-market and the **IP / conflict-of-interest** discussion in [sap-commerce-general-ideas-for-startup.md](https://github.com/AlexTsvetkov/sap-commerce-ideas-for-projects/blob/main/ideas-for-startup/sap-commerce-general-ideas-for-startup.md).
+
 ---
 
 *Part of a backend tooling suite for SAP Commerce Cloud. See [`commerce-mcp`](https://github.com/AlexTsvetkov/commerce-mcp) for the AI-native flagship.*
