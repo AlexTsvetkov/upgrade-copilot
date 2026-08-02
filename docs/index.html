@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>upgrade-copilot · SAP Commerce backend tooling</title>
+<meta name="description" content="AI-assisted version-upgrade and deprecation engine for SAP Commerce — turn a multi-month upgrade project into a tool-driven workflow." />
+<style>
+  :root{--bg:#0b1020;--panel:#141b34;--ink:#e8ecf8;--muted:#9aa6c7;--accent:#5b8cff;--accent2:#31d0aa;--line:#26304f;--maxw:960px}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,#0b1020,#0d1428 60%,#0b1020);color:var(--ink);line-height:1.6}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+  header.hero{padding:72px 0 48px;text-align:center;border-bottom:1px solid var(--line)}
+  .badge{display:inline-block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2);border:1px solid var(--line);border-radius:999px;padding:5px 14px;margin-bottom:20px}
+  h1{font-size:clamp(34px,6vw,56px);margin:.1em 0;background:linear-gradient(90deg,#8fb0ff,#31d0aa);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .tag{font-size:clamp(17px,2.4vw,21px);color:var(--muted);max-width:660px;margin:16px auto 0}
+  .cta{margin-top:32px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .btn{background:var(--accent);color:#fff;padding:12px 22px;border-radius:10px;font-weight:600;border:0}
+  .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+  section{padding:52px 0;border-bottom:1px solid var(--line)}
+  h2{font-size:28px;margin:0 0 8px} .lead{color:var(--muted);margin:0 0 28px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px}
+  .card h3{margin:0 0 8px;font-size:18px} .card p{margin:0;color:var(--muted);font-size:15px}
+  .k{color:var(--accent2);font-weight:600}
+  pre{background:#0a0f22;border:1px solid var(--line);border-radius:12px;padding:18px;overflow:auto;font-size:13.5px;color:#cdd7f5}
+  table{width:100%;border-collapse:collapse;margin-top:8px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);font-size:15px}
+  th{color:var(--muted);font-weight:600}
+  footer{padding:40px 0;text-align:center;color:var(--muted);font-size:14px}
+  .note{background:rgba(91,140,255,.08);border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <span class="badge">SAP Commerce · Java 21 · Gradle</span>
+    <h1>upgrade-copilot</h1>
+    <p class="tag">AI-assisted version-upgrade and deprecation engine for SAP Commerce — turn a multi-month upgrade project into a tool-driven workflow.</p>
+    <div class="cta">
+      <a class="btn" href="https://github.com/AlexTsvetkov/upgrade-copilot">View on GitHub</a>
+      <a class="btn ghost" href="#why">Why it's useful</a>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>The problem</h2>
+    <p class="lead">SAP Commerce version upgrades (2205→2211→…) are multi-month, high-risk and largely manual. Deprecations are discovered at compile/run time; custom-code compatibility is guesswork; SCA scanners drown teams in noise with no SAP-aware triage.</p>
+    <div class="grid"><div class="card"><h3>Expertise-gated</h3><p>SAP Commerce version upgrades (2205→2211→…) are multi-month, high-risk and largely manual. Deprecations are discovered at compile/run time; …</p></div><div class="card"><h3>Costly &amp; slow</h3><p>Manual, error-prone work that scales badly across a large estate.</p></div><div class="card"><h3>Under-tooled</h3><p>The ecosystem lacks modern, opinionated backend tooling for this.</p></div></div>
+  </div>
+</section>
+
+<section id="why">
+  <div class="wrap">
+    <h2>The solution &amp; why it's useful</h2>
+    <p class="lead">Ingest a codebase + target version and produce a **deprecation/impact report**, **automated codemods** for mechanical migrations, and an **AI agent** that proposes and explains the rest — with a test-backed verification loop. Extend to SAP-aware CVE triage.</p>
+    <div class="grid"><div class="card"><h3>Report before change</h3><p>Start from a complete, prioritized impact report — no surprises mid-upgrade.</p></div><div class="card"><h3>Codemods for the mechanical</h3><p>Deterministic transforms handle the bulk; humans/agents handle the judgment calls.</p></div><div class="card"><h3>Verify every change</h3><p>A harness runs the project&#x27;s own tests after each transform.</p></div><div class="card"><h3>Compounding knowledge</h3><p>A curated deprecation/codemod knowledge base per version delta grows with every upgrade.</p></div></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Capabilities</h2>
+    <table><tr><th>Capability</th><th>Description</th></tr><tr><td><span class="k">`scan`</span></td><td>Produce a deprecation &amp; impact report for a target version.</td></tr><tr><td><span class="k">`codemod`</span></td><td>Apply deterministic migrations to Java / items.xml / spring XML / ImpEx.</td></tr><tr><td><span class="k">Agent long-tail</span></td><td>LLM-proposed changes with rationale + verification.</td></tr><tr><td><span class="k">CVE triage</span></td><td>SAP-aware reachability filtering of transitive advisories.</td></tr></table>
+    <p class="note">Early scaffold: the core abstraction, a starter implementation and tests are real. This is a foundation to build on.</p>
+  </div>
+</section>
+
+<footer><div class="wrap"><p>upgrade-copilot · MIT License · © 2026 Aliaksandr Tsviatkou<br/>Part of a backend tooling suite for SAP Commerce Cloud.</p></div></footer>
+</body>
+</html>
