@@ -2,6 +2,8 @@
 
 **AI-assisted version-upgrade and deprecation engine for SAP Commerce — turn a multi-month upgrade project into a tool-driven workflow.**
 
+**🌐 Live site: https://alextsvetkov.github.io/upgrade-copilot/**
+
 > ⚠️ **Status:** early scaffold. The core abstraction, a starter implementation and tests are real; this is a foundation to build on, not a finished product. See [Roadmap](#roadmap).
 
 **Stack:** Java 21 + Gradle.
