@@ -69,6 +69,34 @@
   </div>
 </section>
 
+<section>
+  <div class="wrap">
+    <h2>Usage example</h2>
+    <p class="lead">Distilled from the runnable tutorial <span class="k">examples/Example.java</span>. The <span class="k">Output</span> block is real captured stdout.</p>
+    <p>Scan source files against the default SAP Commerce rules, then print a prioritized impact report:</p>
+    <pre><code>DeprecationScanner scanner = DeprecationRules.defaultScanner();
+
+Map&lt;String, String&gt; files = new LinkedHashMap&lt;&gt;();
+files.put("LegacyTest.java",  "import junit.framework.TestCase;");
+files.put("CartService.java", "@Autowired ... sessionService.getAttribute(\"cart\");");
+files.put("ProductModel.java","@Deprecated public String getOldCode() {...}");
+
+List&lt;Finding&gt; raw = scanner.scanAll(files);
+List&lt;Finding&gt; prioritized = scanner.prioritize(raw);
+System.out.println(scanner.report(raw));</code></pre>
+    <pre>Output:
+Total findings: 4 (shown highest-priority first)
+  1. [BLOCKER] CartService.java:9:31 sessionservice-getattribute-legacy - Single-argument getAttribute(String) ...
+  2. [BLOCKER] LegacyTest.java:3:1 junit-3-4-import - Imports the JUnit 3/4 'junit.framework' package ...
+  3. [WARNING] ProductModel.java:4:5 platform-deprecated-marker - Usage annotated as @Deprecated ...
+  4. [INFO]    CartService.java:5:5 autowired-field-injection - Field injection via @Autowired ...
+
+Upgrade impact report: 4 finding(s)
+Totals: BLOCKER=2, WARNING=1, INFO=1</pre>
+    <p class="note">Run it yourself (JDK 21, no Gradle): <span class="k">find src/main/java -name '*.java' | xargs javac -d /tmp/ex-upgrade &amp;&amp; java -cp /tmp/ex-upgrade com.sapcommercetools.upgrade.examples.Example</span></p>
+  </div>
+</section>
+
 <footer><div class="wrap"><p>upgrade-copilot · MIT License · © 2026 Aliaksandr Tsviatkou<br/>Part of a backend tooling suite for SAP Commerce Cloud.</p></div></footer>
 </body>
 </html>

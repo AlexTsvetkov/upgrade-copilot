@@ -47,6 +47,79 @@ gradle build
 gradle test
 ```
 
+## Usage
+
+Everything below is distilled from the runnable, heavily-commented tutorial at
+`src/main/java/com/sapcommercetools/upgrade/examples/Example.java`. The
+`Output:` blocks are the **real stdout** captured from running it.
+
+### 1. Build the default scanner and scan source files
+
+`DeprecationRules.defaultScanner()` returns a `DeprecationScanner` pre-loaded
+with the illustrative SAP Commerce ruleset. The scanner is line-oriented and
+language-agnostic: it applies every rule's regex to every line of each file
+(supplied here as in-memory `path -> content` strings).
+
+```java
+DeprecationScanner scanner = DeprecationRules.defaultScanner();
+
+Map<String, String> files = new LinkedHashMap<>();
+files.put("LegacyTest.java", "import junit.framework.TestCase;");           // BLOCKER
+files.put("CartService.java", "@Autowired\n... sessionService.getAttribute(\"cart\");"); // INFO + BLOCKER
+files.put("ProductModel.java", "@Deprecated\npublic String getOldCode() { return null; }"); // WARNING
+
+List<Finding> raw = scanner.scanAll(files);
+List<Finding> prioritized = scanner.prioritize(raw); // BLOCKER > WARNING > INFO, then file/line/col
+prioritized.forEach(f -> System.out.println(f.display()));
+```
+
+```text
+Output:
+Loaded rules:
+  - platform-deprecated-marker [WARNING]
+  - sessionservice-getattribute-legacy [BLOCKER]
+  - junit-3-4-import [BLOCKER]
+  - autowired-field-injection [INFO]
+
+Total findings: 4 (shown highest-priority first)
+  1. [BLOCKER] CartService.java:9:31 sessionservice-getattribute-legacy - Single-argument getAttribute(String) is a legacy accessor signature and no longer compiles against the target API. -> Migrate to the typed getAttribute(String, T defaultValue) overload or a dedicated typed accessor.
+  2. [BLOCKER] LegacyTest.java:3:1 junit-3-4-import - Imports the JUnit 3/4 'junit.framework' package, which is unavailable under JUnit 5 (Jupiter). -> Replace with 'org.junit.jupiter.api.*' imports and migrate assertions to org.junit.jupiter.api.Assertions.
+  3. [WARNING] ProductModel.java:4:5 platform-deprecated-marker - Usage annotated as @Deprecated; the referenced API may be removed in a future platform release. -> Locate the replacement API in the target-version migration notes and update the call site.
+  4. [INFO] CartService.java:5:5 autowired-field-injection - Field injection via @Autowired hinders testability and immutability. -> Prefer constructor injection: inject dependencies as final constructor parameters.
+```
+
+### 2. Print the grouped, human-readable report
+
+`report(...)` is what you'd surface to a developer: a summary line, per-severity
+totals, and findings grouped under BLOCKER / WARNING / INFO.
+
+```java
+System.out.println(scanner.report(raw));
+```
+
+```text
+Output:
+Upgrade impact report: 4 finding(s)
+Totals: BLOCKER=2, WARNING=1, INFO=1
+
+BLOCKER (2)
+  [BLOCKER] CartService.java:9:31 sessionservice-getattribute-legacy - Single-argument getAttribute(String) is a legacy accessor signature and no longer compiles against the target API. -> Migrate to the typed getAttribute(String, T defaultValue) overload or a dedicated typed accessor.
+  [BLOCKER] LegacyTest.java:3:1 junit-3-4-import - Imports the JUnit 3/4 'junit.framework' package, which is unavailable under JUnit 5 (Jupiter). -> Replace with 'org.junit.jupiter.api.*' imports and migrate assertions to org.junit.jupiter.api.Assertions.
+
+WARNING (1)
+  [WARNING] ProductModel.java:4:5 platform-deprecated-marker - Usage annotated as @Deprecated; the referenced API may be removed in a future platform release. -> Locate the replacement API in the target-version migration notes and update the call site.
+
+INFO (1)
+  [INFO] CartService.java:5:5 autowired-field-injection - Field injection via @Autowired hinders testability and immutability. -> Prefer constructor injection: inject dependencies as final constructor parameters.
+```
+
+Gradle is not required — compile and run with the JDK (Java 21):
+
+```bash
+find src/main/java -name '*.java' | xargs javac -d /tmp/ex-upgrade
+java -cp /tmp/ex-upgrade com.sapcommercetools.upgrade.examples.Example
+```
+
 ## Roadmap
 
 - [x] Implement the core capability with real logic + unit tests.
